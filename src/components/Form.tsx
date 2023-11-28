@@ -51,7 +51,7 @@ const Form = (): JSX.Element => {
         </div>
         <div className="input-group">
           <InputField
-            type="text"
+            type="email"
             labelName="Email:"
             placeholder="your email"
             state={email}

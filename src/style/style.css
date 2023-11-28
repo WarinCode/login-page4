@@ -72,8 +72,11 @@ form {
             }
         }
 
-        & button[type="button"] h3:hover {
-            color: var(--primary);
+        & button[type="button"]:hover {
+            filter: contrast(95%);
+            & h3{
+                color: var(--primary);
+            }
         }
     }
 
