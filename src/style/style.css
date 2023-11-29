@@ -41,6 +41,7 @@ form {
         font-weight: bold;
         margin-block: 15px 23px;
         text-align: center;
+        cursor: default;
     }
 
     & .btn-group {
@@ -84,6 +85,8 @@ form {
         display: flex;
         align-items: center;
         margin-block: 13px;
+        cursor: default;
+
         & p {
             margin-inline: 13px;
         }

@@ -1,11 +1,19 @@
-import React, { JSX, useState, useEffect, MouseEvent, FormEvent } from "react";
+import React, {
+  JSX,
+  useState,
+  useEffect,
+  MouseEvent,
+  FormEvent,
+  KeyboardEvent,
+} from "react";
 import Button from "./Button";
 import InputField from "./InputField";
 import { FcGoogle } from "react-icons/fc";
 import { FaApple } from "react-icons/fa";
 import { MdAlternateEmail } from "react-icons/md";
 import { AiOutlineLock, AiOutlineUnlock } from "react-icons/ai";
-
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 interface UserData {
   email: string;
   password: string;
@@ -17,10 +25,12 @@ const Form = (): JSX.Element => {
   const [data, setData] = useState<UserData[]>([]);
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
+  const [isSubmit, setIsSubmit] = useState<boolean>(false);
 
   useEffect((): void => {
     console.log("login สำเร็จ");
     console.log(data);
+    setIsSubmit(true);
   }, [data]);
 
   const getUser = (): UserData => {
@@ -33,12 +43,31 @@ const Form = (): JSX.Element => {
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>): void => {
     e.preventDefault();
-    setData((prev: UserData[]): UserData[] => [...prev, getUser()]);
+    const user: UserData = getUser();
+
+    if (data.some((item: UserData): boolean => item.email === user.email)) {
+      toast.error("ไม่สามารถ login ได้!", {
+        position: "top-center",
+        autoClose: 1500,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: false,
+        draggable: true,
+        progress: undefined,
+        theme: "dark",
+      });
+    } else {
+      setData((prev: UserData[]): UserData[] => [...prev, user]);
+    }
   };
 
   return (
     <>
-      <form onSubmit={(e: FormEvent<HTMLFormElement>):void => handleSubmit(e)}>
+      <form
+        onSubmit={(
+          e: FormEvent<HTMLFormElement> | KeyboardEvent<HTMLFormElement>
+        ): void => handleSubmit(e)}
+      >
         <header>Create your account</header>
         <span className="btn-group">
           <Button text="use google" icon={<FcGoogle className="btn-icon" />} />
@@ -56,6 +85,8 @@ const Form = (): JSX.Element => {
             placeholder="your email"
             state={email}
             setState={setEmail}
+            isSubmit={isSubmit}
+            setIsSubmit={setIsSubmit}
             icon={<MdAlternateEmail className="input-icon" />}
           />
           <InputField
@@ -64,6 +95,8 @@ const Form = (): JSX.Element => {
             placeholder="your password"
             state={password}
             setState={setPassword}
+            isSubmit={isSubmit}
+            setIsSubmit={setIsSubmit}
             icon={
               open ? (
                 <AiOutlineUnlock
@@ -89,6 +122,7 @@ const Form = (): JSX.Element => {
           </a>
         </span>
       </form>
+      <ToastContainer />
     </>
   );
 };
